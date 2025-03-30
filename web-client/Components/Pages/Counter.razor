@@ -1,0 +1,37 @@
+﻿@page "/counter"
+@rendermode InteractiveServer
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<div class="m-4">
+    <input type="text" @oninput="ValidateInput"/>
+    <div>@errorMessage</div>
+</div>
+
+@code {
+    private int currentCount = 0;
+
+    public string errorMessage = string.Empty;
+
+    [Parameter]
+    public int IncrementParameter { get; set; } = 1;
+
+    private void IncrementCount()
+    {
+        currentCount+=IncrementParameter;
+    }
+    private void ValidateInput(ChangeEventArgs e)
+    {
+        if(e.Value.ToString().Trim().Length<5){
+            errorMessage = "must have at least five characters";
+        }else{
+            errorMessage = "input is valid";
+        }
+    }
+}
