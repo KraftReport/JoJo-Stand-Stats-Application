@@ -10,8 +10,10 @@
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 <div class="m-4">
-    <input type="text" @oninput="ValidateInput"/>
+    <input type="text" class="@border" @onchange="Search" @oninput="ValidateInput" @onfocus="OnFocus" @onblur="OnBlur"   />
     <div>@errorMessage</div>
+    <p class="@textColor">@characterCount</p>
+    <b>@result</b>
 </div>
 
 @code {
@@ -19,19 +21,57 @@
 
     public string errorMessage = string.Empty;
 
+    public string border = "";
+
+    public string textColor = "";
+
+    public string characterCount = "";
+
+    public string result = "";
+
     [Parameter]
     public int IncrementParameter { get; set; } = 1;
+
+
 
     private void IncrementCount()
     {
         currentCount+=IncrementParameter;
     }
+
     private void ValidateInput(ChangeEventArgs e)
     {
-        if(e.Value.ToString().Trim().Length<5){
+        characterCount = e?.Value?.ToString()?.Trim().Length.ToString();
+        if(e?.Value?.ToString()?.Trim().Length<5){
+            textColor = "text-danger";
             errorMessage = "must have at least five characters";
+        }else if(e?.Value?.ToString()?.Trim().Length>20){ 
+            textColor = "text-danger";
+            errorMessage = "maximun character count is 20";
         }else{
+            textColor = "text-success";
             errorMessage = "input is valid";
         }
+    }
+
+    private void OnFocus(FocusEventArgs e)
+    {
+        border = "border border-5 border-primary rounded rounded-5";
+    }
+
+    private void OnBlur(FocusEventArgs e)
+    { 
+        border = ""; 
+        if(characterCount == "0"){
+            textColor = "";
+            errorMessage = "";
+            characterCount = "";
+        }
+    }
+
+    async Task Search()
+    {
+        await Task.Delay(3000);
+        result = "88 results are found";
     }
 }
